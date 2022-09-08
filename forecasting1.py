@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Mar  6 19:19:07 2022
-
-"""
 
 import pandas as pd
 import numpy as np
@@ -17,10 +12,11 @@ df1.columns=["Date","Flow"]
 #all flow values<10 are treated as NA
 df1.loc[df1['Flow'] < 20] = np.nan
 
+#Average flow for one hour taken by grouping flow values hourly.
 groupkey=pd.to_datetime(df1.Date.dt.strftime('%Y-%m-%d %H'))
 df2=df1.groupby(groupkey).agg({'Flow':'mean'})
 
-
+#Outliers Processing
 def processOutliers(inputSeries):
     inputSeries.reset_index(inplace=True,drop=True)
     
@@ -60,7 +56,7 @@ df3=df2.copy()
 # df4=processOutliers(df3)
 
 
-#Making Train and Test Data
+#Making Train and Test Data (for 1 month)
 
 df3.reset_index(inplace=True)
 train = df3[(df3.Date > '2021-10-31') & (df3.Date < '2021-11-24') ]
