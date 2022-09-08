@@ -1,22 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Feb 17 21:54:33 2022
 
-@author: abc
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Feb 16 02:04:54 2022
-
-@author: abc
-"""
 
 import pandas as pd
 import numpy as np
 import pulp
 
-
+#Importing Flow Values as per family Sizes.
 
 df_small=pd.read_excel("demand_profile.xlsx",index_col="Hours",sheet_name="small")
 df_med=pd.read_excel("demand_profile.xlsx",index_col="Hours",sheet_name="medium")
@@ -24,12 +12,13 @@ df_large=pd.read_excel("demand_profile.xlsx",index_col="Hours",sheet_name="large
 
 a=np.arange(0,25)
 
+#Objective Function
 tco=pulp.LpProblem("TCO",pulp.LpMinimize)
 xs=pulp.LpVariable.dicts("xs",(a),lowBound=0,upBound=1000,cat="Countinuous")
 z=pulp.LpVariable.dicts("z",([1,2]),lowBound=0,cat="Countinuous")
 
 
-  
+#Constraints 
 tco+=pulp.lpSum([xs[i] for i in a])==sum(df_large["D"])
     
 for i in a:
